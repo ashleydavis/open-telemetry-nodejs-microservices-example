@@ -6,6 +6,14 @@ Learn about building with microservices with my book [Bootstrapping Microservice
 
 [Support my work](https://www.codecapers.com.au/about#support-my-work)
 
+# Overview
+
+This repo creates a trival microservices application that exports telemetry via OpenTelemetry to Honeycomb.
+
+Here's what the example looks like:
+
+![Example overview](./docs/Diagram.png)
+
 # Project layout
 
 ```
