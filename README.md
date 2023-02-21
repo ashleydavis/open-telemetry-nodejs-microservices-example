@@ -1,10 +1,6 @@
-# nodejs-microservices-example
+# open-telemetry-nodejs-microservices-example
 
-Example of a monorepo with multiple Node.js microservices (using Docker, Docker-Compose and Kubernetes) that have separate CI/CD pipelines. 
-
-This allows the convenience of a monorepo but with the flexibility of independent deployment schedules that makes microservices so good.
-
-This code repo accompanies my blog post on [creating separate CI/CD pipelines in a monorepo](https://www.codecapers.com.au/separate-cd-pipelines-for-microservices-in-a-monorepo/).
+An example of using open telemetry across Node.js microservices and generating traces into Honeycomb.
 
 Learn about building with microservices with my book [Bootstrapping Microservices](http://bit.ly/2o0aDsP).
 
@@ -13,7 +9,7 @@ Learn about building with microservices with my book [Bootstrapping Microservice
 # Project layout
 
 ```
-nodejs-microservices-example
+open-telemetry-nodejs-microservices-example
 │   docker-compose.yml      -> Docker Compose file for development & testing.
 │   package-lock.json
 │   package.json
@@ -37,6 +33,7 @@ nodejs-microservices-example
 │   │
 │   └───src
 │           index.js
+│           tracing.js      -> Configuration for OpenTelementry and Honecomb.
 │
 ├───scripts                 -> Deployment helper scripts.
 │   │   build-image.sh        -> Builds a Docker image.
@@ -58,6 +55,7 @@ nodejs-microservices-example
     │
     └───src
             index.js
+            tracing.js      -> Configuration for OpenTelementry and Honecomb.
 ```
 
 # Setup
@@ -82,7 +80,19 @@ Change directory to the microservices application:
 cd nodejs-microservices-example
 ```
 
-Use Docker Compose to start the microservies application:
+Set your Honeycomb API key:
+
+```bash
+export HONEYCOMB_API_KEY=<your-honeycomb-api-key>
+```
+
+Or on Windows:
+
+```bash
+set HONEYCOMB_API_KEY=<your-honeycomb-api-key>
+```
+
+Use Docker Compose to start the microservices application:
 
 ```bash
 docker compose up --build
@@ -96,6 +106,8 @@ An example REST APIs are available:
 
     http://127.0.0.1:4000/api/data
     http://127.0.0.1:4001/api/data
+
+Try making some requests to these APIs and go to Honeycomb to see the traces that are created.
 
 The Mongodb database is available:
 

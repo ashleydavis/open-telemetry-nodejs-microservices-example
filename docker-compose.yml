@@ -30,6 +30,8 @@ services:
      - PORT=80
      - DBHOST=mongodb://db:27017
      - NODE_ENV=development
+     - OTEL_SERVICE_NAME=worker
+     - HONEYCOMB_API_KEY=${HONEYCOMB_API_KEY}
     depends_on:
      - db
     restart: always
@@ -48,6 +50,8 @@ services:
     environment:
      - PORT=80
      - NODE_ENV=development
+     - OTEL_SERVICE_NAME=gateway
+     - HONEYCOMB_API_KEY=${HONEYCOMB_API_KEY}
     depends_on:
      - worker
     restart: always

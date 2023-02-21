@@ -4,6 +4,5 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 COPY nodemon.json ./
 
-CMD npm config set cache-min 9999999 \
-    && npm install \
+CMD npm install --prefer-offline \
     && npm run start:dev

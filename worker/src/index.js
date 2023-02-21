@@ -2,6 +2,9 @@
 
 const express = require('express');
 const mongodb = require('mongodb');
+const morgan = require('morgan');
+const opentelemetry = require('@opentelemetry/api');
+const { tracer } = require("./tracing");
 
 const PORT = process.env.PORT || 80;
 const HOST = process.env.HOST || "0.0.0.0";
@@ -28,6 +31,14 @@ async function main() {
 
     const app = express();
 
+    if (process.env.NODE_ENV === "development") {
+        morgan.token('req-headers', function (req, res) {
+            return JSON.stringify(req.headers, null, 4);
+        });
+
+        app.use(morgan(':method :url :status :req-headers'));
+    }
+
     app.get("/api/data", async (req, res) => {
         const collection = db.collection("mycollection");
         const documents = await collection.find().toArray();
@@ -37,7 +48,7 @@ async function main() {
     await startServer(app);
 }
 
-main() 
+main()
     .then(() => console.log("Online"))
     .catch(err => {
         console.error("Failed to start!");
