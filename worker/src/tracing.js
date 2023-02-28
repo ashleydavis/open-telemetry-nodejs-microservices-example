@@ -14,6 +14,34 @@ const sdk = new HoneycombSDK({
 
 sdk.start();
 
+//
+// Global tracer for this service.
+//
+const tracer = opentelemetry.trace.getTracer(process.env.OTEL_SERVICE_NAME);
+
+//
+// Makes a new span (and handles errors).
+//
+async function makeSpan(name, fn) {
+    await tracer.startActiveSpan(name, async span => {
+        try {
+            await fn();				
+        }
+        catch (err) {
+            // Records the error.
+            span.recordException(err);
+            
+            // Rethrow the exception.
+            throw err;			
+        }
+        finally {
+            span.end();
+        }
+    });
+}
+
+
 module.exports = {
-    tracer: opentelemetry.trace.getTracer(process.env.OTEL_SERVICE_NAME),
+    tracer,
+    makeSpan,
 };
