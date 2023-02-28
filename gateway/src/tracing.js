@@ -1,5 +1,7 @@
 //
 // https://docs.honeycomb.io/getting-data-in/opentelemetry/node-distro/
+// https://open-telemetry.github.io/opentelemetry-js/classes/_opentelemetry_api.TraceAPI.html
+// https://opentelemetry.io/docs/
 //
 
 const { HoneycombSDK } = require('@honeycombio/opentelemetry-node');
