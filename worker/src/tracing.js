@@ -40,8 +40,50 @@ async function makeSpan(name, fn) {
     });
 }
 
+//
+// Reports an error via open telemetry.
+//
+async function reportError(fn) {
+    try {
+        await fn();
+    }
+    catch (err) {
+        console.error("An error occurred:");
+        console.error(err);
+
+        const span = opentelemetry.trace.getActiveSpan();
+        if (span) {
+            span.recordException(err);
+        }
+
+        throw err;
+    }
+}
+
+//
+// Adds an attribute to the current open telemetry span.
+//
+function setAttribute(name, value) {
+    const activeSpan = opentelemetry.trace.getActiveSpan();
+    if (activeSpan) {        
+        activeSpan.setAttribute(name, value);
+    }
+}
+
+//
+// Records an event with open telemetry.
+//
+function recordEvent(eventName, attributes) {
+	const activeSpan = opentelemetry.trace.getActiveSpan();
+    if (activeSpan) {
+        activeSpan.addEvent(eventName, attributes);
+    }
+}
 
 module.exports = {
     tracer,
     makeSpan,
+    reportError,
+    setAttribute,
+    recordEvent,
 };
