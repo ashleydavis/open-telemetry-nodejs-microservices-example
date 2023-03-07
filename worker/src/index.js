@@ -3,7 +3,6 @@
 const express = require('express');
 const mongodb = require('mongodb');
 const morgan = require('morgan');
-const { makeSpan } = require("./tracing");
 
 const PORT = process.env.PORT || 80;
 const HOST = process.env.HOST || "0.0.0.0";
@@ -39,12 +38,9 @@ async function main() {
     }
 
     app.get("/api/data", async (req, res) => {
-
-        await makeSpan("my-database-request", async () => {
-            const collection = db.collection("mycollection");
-            const documents = await collection.find().toArray();
-            res.json(documents);
-        });
+        const collection = db.collection("mycollection");
+        const documents = await collection.find().toArray();
+        res.json(documents);
     });
 
     await startServer(app);
